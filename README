@@ -57,3 +57,6 @@ DOMAIN           = somethingsomethin00.onion
 LFS_JWT_SECRET   = somethingsomethin
 OFFLINE_MODE     = false
 ---------------------------------
+
+use `./docker-compose.sh up` to up service
+use `./docker-compose.sh down` to down service
