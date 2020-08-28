@@ -1,43 +1,6 @@
 
 this is works ok (torsocks git push - also) on 3 march 2020
 
-docker-compose.yml is following
-
----------------------------------
-version: '3.7'
-
-services:
-  app:
-    image: gitea/gitea:latest
-    environment:
-      - USER_UID=1000
-      - USER_GID=1000
-    restart: always
-    volumes:
-      - ./gitea:/data:z
-
-  tls:
-    build: "github.com/AnimusPEXUS/simpletlsproxy.git"
-    restart: always
-    volumes:
-      - "./tls:/tls:z"
-    command: app app:3000 :4433
-
-  httpsredirect:
-    build: "https://github.com/AnimusPEXUS/simplehttpsredirect.git"
-    restart: always
-    command: app -s :8080 -n
-
-  tor:
-    image: jess/tor
-    restart: always
-    user: root
-    volumes:
-      - "./tor_volumes:/hs:z"
-    command: tor --allow-missing-torrc --ignore-missing-torrc HiddenServiceDir /hs HiddenServicePort "443 tls:4433" HiddenServicePort "80 httpsredirect:8080" HiddenServicePort "22 app:22"
----------------------------------
-
-
 don't forget to create openssl cert inside ./tls directory:
 
 openssl req -nodes -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365
