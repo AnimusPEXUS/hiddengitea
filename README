@@ -60,3 +60,48 @@ OFFLINE_MODE     = false
 
 use `./docker-compose.sh up` to up service
 use `./docker-compose.sh down` to down service
+
+= settings to make `go get` and `git` work with tor =
+
+1. go have to be configured to work over tor's socks5: 
+
+for this, you can export all_proxy='socks5://127.0.0.1:9050' and
+make http_proxy=all_proxy.
+
+note: go doesn't support 'socks5h' scheme, and it's enogh 'socks5' scheme to
+resolve .onion domain names.
+
+also, you can prepair script to run go commands:
+```bash
+#!/bin/bash
+
+export all_proxy="socks5://127.0.0.1:9050"
+export http_proxy=$all_proxy
+export https_proxy=$all_proxy
+
+"$@"
+```
+
+save it for instance as `~/if/soxy` and run go command like so: 
+~/if/soxy go get 'someonion.onion/project/package'
+
+2. git also have to be configured to be able to resolve .onion names and connect 
+to hidden service
+
+part of .gitconfig in $home directory. 
+(NOTE: this may be configured, instead, localy to repository using 
+       `git config --local`)
+(NOTE: note 'socks5h' in proxy configuration: it makes git to resolve DN via TOR)
+```
+[http "https://*.onion"]
+	sslVerify = false
+	proxy = "socks5h://127.0.0.1:9050"
+
+```
+
+3. since newsware_server and newsware_server_utils are private, and go get
+forces git to download repositories via http(s) access, it is required to
+use http username/password for accessing those repositories.
+
+create file ~/.netrc and add to it line:
+machine someonion.onion login yoraccountname password giteaapikeygotfromesettingsmenu
