@@ -62,7 +62,7 @@ part of .gitconfig in $home directory.
 
 ```
 
-3. since newsware_server and newsware_server_utils are private, and go get
+3. since your projects may be private, and go get
 forces git to download repositories via http(s) access, it is required to
 use http username/password for accessing those repositories.
 
